@@ -1,0 +1,9 @@
+# Visual Studio Code
+.vscode/
+
+# dmg
+dmg/
+
+# fonts
+fonts/
+*.zip
