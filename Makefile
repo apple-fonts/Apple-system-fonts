@@ -30,25 +30,31 @@ endef
 .PHONY: all
 all: fonts
 
-# .dmg files
-.PHONY: dmg
-dmg: $(DMG_FILES)
-
-# download each .dmg file according to tue URLs provided in each .url file
-$(DMG_DIR)/%.dmg: $(URL_DIR)/%.url
-	@mkdir -p "$(dir $@)"
-	@echo "[Downloading \"$@\"]"
-	@cd "$(dir $@)"; wget -c --no-use-server-timestamps -i "$(CURDIR)/$<"
+# check prerequisites
+.PHONY: check-prerequisites
+check-prerequisites:
+	$(call CHECK_PREREQUISITES)
 
 # extract fonts from .dmg files
 .PHONY: fonts
 fonts: $(FONT_DIRS)
 
-# extract fonts from each .dmg into a directory
-$(FONTS_DIR)/%: $(DMG_DIR)/%.dmg
-	$(call CHECK_PREREQUISITES)
+# .dmg files
+.PHONY: dmg
+dmg: $(DMG_FILES)
+
+# download each .dmg file according to tue URLs provided in each .url file
+$(DMG_DIR)/%.dmg: check-prerequisites $(URL_DIR)/%.url
+	$(eval URL_FILE = "$(CURDIR)/$(word 2, $^)")
 	@mkdir -p "$(dir $@)"
-	bash "$(EXTRACT_EXEC)" "$<" "$@"
+	@echo "[Downloading \"$@\"]"
+	@cd "$(dir $@)"; wget -c --no-use-server-timestamps -i "$(URL_FILE)"
+
+# extract fonts from each .dmg into a directory
+$(FONTS_DIR)/%: check-prerequisites $(DMG_DIR)/%.dmg
+	$(eval DMG_FILE = "$(CURDIR)/$(word 2, $^)")
+	@mkdir -p "$(dir $@)"
+	bash "$(EXTRACT_EXEC)" "$(DMG_FILE)" "$@"
 
 # pack all fonts into a .zip file
 .PHONY: zip
