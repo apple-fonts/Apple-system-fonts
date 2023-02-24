@@ -10,11 +10,11 @@ FONT_DIRS := $(FONT_NAMES:%=$(FONTS_DIR)/%)
 
 FONTS_ZIP := fonts.zip
 
-CHECK_PREREQUISITES_EXEC := check_prerequisites.sh
+CHECK_PREREQUISITES_EXEC := check_exec.sh
 EXTRACT_EXEC := extract_fonts.sh
 
 # check prerequisites
-PREREQUISITES := "7z p7zip-full" "dmg2img"
+PREREQUISITES := "7z" "dmg2img"
 define CHECK_PREREQUISITES :=
 	@ret=0; \
 	for i in $(PREREQUISITES); do \
