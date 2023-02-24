@@ -1,32 +1,38 @@
-#!/usr/bin/bash
+#!/bin/bash
 
-ERROR_ARGS=1
-ERROR_RW=-1
+# Linux formatting control sequences
+TEXT_RED_FG_START="\x1B[31m"
+TEXT_BOLD_START="\x1B[1m"
+TEXT_RESET="\x1B[0m"
 
-if [ $# -lt 2 ]
+if [ \( -z "$1" \) -o \( -z "$2" \) ]
 then
     echo "Usage: $(which bash) \"$0\" \"<path_to_dmg>\"" "\"<extract_dir>\"" >&2
-    exit $ERROR_ARGS
+    exit 1
 fi
 
 dmgFile="$1"
 extractDir="$2"
 
-# Convert .dmg to .img
-function extract_dmg_to_img {
+# Extract fonts from .dmg
+function extract_fonts_from_dmg {
     local dmgFile="$1"
-    local imgFile="$2"
-    dmg2img "$dmgFile" "$imgFile"
-}
-
-# Extract fonts from .img
-function extract_fonts_from_img {
-    local imgFile="$1"
     local extractDir="$2"
 
-    # 1. extract .img to temporary directory
+    # pre-check extraction
+    if ! [ -f "$dmgFile" ] # check dmg file for extraction
+    then
+        echo -e "$TEXT_RED_FG_START$TEXT_BOLD_START[ERROR]$TEXT_RESET \"$dmgFile\" is not a valid .dmg file for extraction." >&2
+        exit 1
+    elif ! mkdir -p "$extractDir" # create extract directory if not exists
+    then
+        echo -e "$TEXT_RED_FG_START$TEXT_BOLD_START[ERROR]$TEXT_RESET Failed to create the extract directory \"$extractDir\"."
+        exit 1
+    fi
+
+    # 1. extract .dmg to temporary directory
     local tempDir="$(mktemp -d)"
-    7z x "$imgFile" -O"$tempDir"
+    7z x "$dmgFile" -O"$tempDir"
 
     # 2. extract the .pkg file in the temporary directory
     find "$tempDir" -name "*.pkg" -exec 7z x -O"$tempDir" {} ";"
@@ -40,31 +46,4 @@ function extract_fonts_from_img {
     rm -rf "$tempDir"
 }
 
-# extract fonts from a .dmg file
-# Usage: extract_fonts "$dmgFile" "$extractDir"
-function extract_fonts {
-    local dmgFile="$1"
-    local extractDir="$2"
-
-    # 1. create extract directory for fonts
-    mkdir -pv "$extractDir"
-    if [[ $? -ne 0 ]]; then
-        exit $ERROR_RW
-    fi
-
-    # 2. create temporary directory to extract files
-    local tempDir="$(mktemp -d)"
-
-    # 3. convert .dmg to .img, and put int in temporary directory
-    local dmgBaseName="$(basename "${dmgFile%.*}")"
-    local imgFile="$tempDir/$dmgBaseName.img"
-    extract_dmg_to_img "$dmgFile" "$imgFile"
-
-    # 4. extract fonts from the .img file
-    extract_fonts_from_img "$imgFile" "$extractDir"
-
-    # 5. clean up temporary directory
-    rm -rf "$tempDir"
-}
-
-extract_fonts "$dmgFile" "$extractDir"
+extract_fonts_from_dmg "$dmgFile" "$extractDir"
