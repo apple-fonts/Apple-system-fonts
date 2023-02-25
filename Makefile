@@ -1,5 +1,6 @@
 URL_DIR := url
 DMG_DIR := dmg
+
 FONTS_DIR := fonts
 
 URL_FILES := $(shell ls $(URL_DIR)/*.url -1)
@@ -18,9 +19,9 @@ EXTRACT_EXEC := extract_fonts.sh
 all: fonts
 
 # check all prerequisites
-.PHONY: check-prerequisites
-check-prerequisites:
+define CHECK_ALL_PREREQUISITES :=
 	bash $(CHECK_ALL_PREREQUISITES_EXEC)
+endef
 
 # extract fonts from .dmg files
 .PHONY: fonts
@@ -31,15 +32,16 @@ fonts: $(FONT_DIRS)
 dmg: $(DMG_FILES)
 
 # download each .dmg file according to tue URLs provided in each .url file
-$(DMG_DIR)/%.dmg: check-prerequisites $(URL_DIR)/%.url
-	$(eval URL_FILE = "$(CURDIR)/$(word 2, $^)")
+$(DMG_DIR)/%.dmg: $(URL_DIR)/%.url
+	$(eval URL_FILE = "$<")
 	@mkdir -p "$(dir $@)"
 	@echo "[Downloading \"$@\"]"
-	@cd "$(dir $@)"; wget -c --no-use-server-timestamps -i "$(URL_FILE)"
+	@cd "$(dir $@)"; wget -c --no-use-server-timestamps -i "$(CURDIR)/$(URL_FILE)"
 
 # extract fonts from each .dmg into a directory
-$(FONTS_DIR)/%: check-prerequisites $(DMG_DIR)/%.dmg
-	$(eval DMG_FILE = "$(CURDIR)/$(word 2, $^)")
+$(FONTS_DIR)/%: $(DMG_DIR)/%.dmg
+	$(call CHECK_ALL_PREREQUISITES)
+	$(eval DMG_FILE = "$<")
 	@mkdir -p "$(dir $@)"
 	bash "$(EXTRACT_EXEC)" "$(DMG_FILE)" "$@"
 
@@ -54,6 +56,9 @@ $(FONTS_ZIP): $(FONT_DIRS)
 .PHONY: clean
 clean: clean_fonts
 
+.PHONY: clean_all
+clean_all: clean_fonts clean_dmg clean_zip
+
 .PHONY: clean_fonts
 clean_fonts:
 	-rm -rf "$(FONTS_DIR)"
@@ -65,6 +70,3 @@ clean_dmg:
 .PHONY: clean_zip
 clean_zip:
 	-rm -f "$(FONTS_ZIP)"
-
-.PHONY: clean_all
-clean_all: clean_fonts clean_dmg clean_zip
