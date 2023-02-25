@@ -26,7 +26,7 @@ function extract_fonts_from_dmg {
         exit 1
     elif ! mkdir -p "$extractDir" # create extract directory if not exists
     then
-        echo -e "$TEXT_RED_FG_START$TEXT_BOLD_START[ERROR]$TEXT_RESET Failed to create the extract directory \"$extractDir\"."
+        echo -e "$TEXT_RED_FG_START$TEXT_BOLD_START[ERROR]$TEXT_RESET Failed to create the extract directory \"$extractDir\"." >&2
         exit 1
     fi
 
