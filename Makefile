@@ -17,7 +17,7 @@ EXTRACT_EXEC := extract_fonts.sh
 
 # build all
 .PHONY: all
-all: fonts
+all: fonts zip
 
 # check all prerequisites
 define CHECK_ALL_PREREQUISITES :=
