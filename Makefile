@@ -2,6 +2,7 @@ URL_DIR := url
 DMG_DIR := dmg
 
 FONTS_DIR := fonts
+RELEASE_DIR := release
 
 URL_FILES := $(shell ls $(URL_DIR)/*.url -1)
 DMG_FILES := $(URL_FILES:$(URL_DIR)/%.url=$(DMG_DIR)/%.dmg)
@@ -52,6 +53,16 @@ zip: $(FONTS_ZIP)
 $(FONTS_ZIP): $(FONT_DIRS)
 	zip -r "$@" $(FONT_DIRS:%="%")
 
+# release
+.PHONY: release
+release: $(DMG_FILES) $(FONTS_ZIP)
+	@mkdir -pv "$(RELEASE_DIR)"
+	@for DMG_FILE in $(DMG_FILES); \
+	do \
+		ln -rsfv "$$DMG_FILE" "$(RELEASE_DIR)"; \
+	done
+	@ln -rsfv "$(FONTS_ZIP)" "$(RELEASE_DIR)"
+
 # cleanup
 .PHONY: clean
 clean: clean_fonts
@@ -60,13 +71,17 @@ clean: clean_fonts
 clean_all: clean_fonts clean_dmg clean_zip
 
 .PHONY: clean_fonts
-clean_fonts:
-	-rm -rf "$(FONTS_DIR)"
+clean_fonts: clean_release
+	-rm -rfv "$(FONTS_DIR)"
+
+.PHONY: clean_release
+clean_release:
+	-rm -rfv "$(RELEASE_DIR)"
 
 .PHONY: clean_dmg
 clean_dmg:
-	-rm -rf "$(DMG_DIR)"
+	-rm -rfv "$(DMG_DIR)"
 
 .PHONY: clean_zip
 clean_zip:
-	-rm -f "$(FONTS_ZIP)"
+	-rm -fv "$(FONTS_ZIP)"
