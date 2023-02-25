@@ -10,7 +10,7 @@ DMG_FILES := $(URL_FILES:$(URL_DIR)/%.url=$(DMG_DIR)/%.dmg)
 FONT_NAMES := $(URL_FILES:$(URL_DIR)/%.url=%)
 FONT_DIRS := $(FONT_NAMES:%=$(FONTS_DIR)/%)
 
-FONTS_ZIP := fonts.zip
+FONTS_ZIP := Apple-system-fonts.zip
 
 CHECK_ALL_PREREQUISITES_EXEC := check_all_prerequisites.sh
 EXTRACT_EXEC := extract_fonts.sh
