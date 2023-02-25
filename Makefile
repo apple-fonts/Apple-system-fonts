@@ -14,7 +14,7 @@ CHECK_PREREQUISITES_EXEC := check_exec.sh
 EXTRACT_EXEC := extract_fonts.sh
 
 # check prerequisites
-PREREQUISITES := "7z" "dmg2img"
+PREREQUISITES := "7z"
 define CHECK_PREREQUISITES :=
 	@ret=0; \
 	for i in $(PREREQUISITES); do \
