@@ -37,7 +37,7 @@ Run
 make -j
 ```
 
-to extract the fonts from the `.dmg` files, and pack all extracted files into the `fonts.zip` file.
+to extract the fonts from the `.dmg` files, and pack all extracted files into the `Apple-system-fonts.zip` file.
 
 Or, you can run the two steps separately:
 
@@ -46,7 +46,7 @@ Or, you can run the two steps separately:
     ```bash
     make fonts -j
     ```
-2. Extract and pack all fonts into `fonts.zip`:
+2. Extract and pack all fonts into `Apple-system-fonts.zip`:
 
     ```bash
     make zip -j
@@ -60,12 +60,12 @@ Run
 make release -j
 ```
 
-to create the `release` directory, and create symlinks to `.dmg` files as well as the `fonts.zip` file in this directory.
+to create the `release` directory, and create symlinks to `.dmg` files as well as the `Apple-system-fonts.zip` file in this directory.
 
 
 ## Clean up
 
-* Clean up generated fonts (removes the `release` directory, the `fonts.zip` file, and the `fonts` directory):
+* Clean up generated fonts (removes the `release` directory, the `Apple-system-fonts.zip` file, and the `fonts` directory):
 
     ```bash
     make clean
@@ -75,7 +75,7 @@ to create the `release` directory, and create symlinks to `.dmg` files as well a
     ```bash
     make clean_release
     ```
-* Clean up the generated `fonts.zip` file:
+* Clean up the generated `Apple-system-fonts.zip` file:
 
     ```bash
     make clean_zip
