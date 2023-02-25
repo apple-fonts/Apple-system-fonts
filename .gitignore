@@ -7,3 +7,6 @@ dmg/
 # fonts
 fonts/
 *.zip
+
+# release
+release/
