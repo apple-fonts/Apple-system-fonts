@@ -5,6 +5,7 @@ This repository provides the fonts for the Apple system.
 The fonts are extracted from the .dmg files, which can be obtained at https://developer.apple.com/fonts/.
 
 The available fonts are:
+
 * SF Pro
 * SF Compact
 * SF Mono
@@ -61,7 +62,6 @@ make release -j
 ```
 
 to create the `release` directory, and create symlinks to `.dmg` files as well as the `Apple-system-fonts.zip` file in this directory.
-
 
 ## Clean up
 
