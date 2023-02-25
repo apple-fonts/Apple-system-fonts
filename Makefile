@@ -65,23 +65,23 @@ release: $(DMG_FILES) $(FONTS_ZIP)
 
 # cleanup
 .PHONY: clean
-clean: clean_fonts
+clean: clean_release clean_zip clean_fonts
 
 .PHONY: clean_all
-clean_all: clean_fonts clean_dmg clean_zip
-
-.PHONY: clean_fonts
-clean_fonts: clean_release
-	-rm -rfv "$(FONTS_DIR)"
+clean_all: clean clean_dmg
 
 .PHONY: clean_release
 clean_release:
-	-rm -rfv "$(RELEASE_DIR)"
-
-.PHONY: clean_dmg
-clean_dmg:
-	-rm -rfv "$(DMG_DIR)"
+	-rm -rf "$(RELEASE_DIR)"
 
 .PHONY: clean_zip
-clean_zip:
-	-rm -fv "$(FONTS_ZIP)"
+clean_zip: clean_release
+	-rm -f "$(FONTS_ZIP)"
+
+.PHONY: clean_fonts
+clean_fonts:
+	-rm -rf "$(FONTS_DIR)"
+
+.PHONY: clean_dmg
+clean_dmg: clean_release
+	-rm -rf "$(DMG_DIR)"
