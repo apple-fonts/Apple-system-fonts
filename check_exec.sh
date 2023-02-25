@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # Linux formatting control sequences
 TEXT_RED_FG_START="\x1B[31m"

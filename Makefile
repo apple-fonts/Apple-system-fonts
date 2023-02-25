@@ -10,30 +10,17 @@ FONT_DIRS := $(FONT_NAMES:%=$(FONTS_DIR)/%)
 
 FONTS_ZIP := fonts.zip
 
-CHECK_PREREQUISITES_EXEC := check_exec.sh
+CHECK_ALL_PREREQUISITES_EXEC := check_all_prerequisites.sh
 EXTRACT_EXEC := extract_fonts.sh
-
-# check prerequisites
-PREREQUISITES := "7z"
-define CHECK_PREREQUISITES :=
-	@ret=0; \
-	for i in $(PREREQUISITES); do \
-		bash $(CHECK_PREREQUISITES_EXEC) $$i; \
-		ret=$$(expr $$ret \| $$?); \
-	done; \
-	if [ $$ret -ne 0 ]; then \
-		exit $$ret; \
-	fi
-endef
 
 # build all
 .PHONY: all
 all: fonts
 
-# check prerequisites
+# check all prerequisites
 .PHONY: check-prerequisites
 check-prerequisites:
-	$(call CHECK_PREREQUISITES)
+	bash $(CHECK_ALL_PREREQUISITES_EXEC)
 
 # extract fonts from .dmg files
 .PHONY: fonts
