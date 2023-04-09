@@ -1,3 +1,5 @@
+USER := $(shell whoami)
+
 URL_DIR := url
 DMG_DIR := dmg
 
@@ -9,6 +11,16 @@ DMG_FILES := $(URL_FILES:$(URL_DIR)/%.url=$(DMG_DIR)/%.dmg)
 
 FONT_NAMES := $(URL_FILES:$(URL_DIR)/%.url=%)
 FONT_DIRS := $(FONT_NAMES:%=$(FONTS_DIR)/%)
+
+SYSTEM_FONT_INSTALL_DIR := /usr/local/share/fonts
+USER_FONT_INSTALL_DIR := $(HOME)/.local/share/fonts
+
+ifeq ($(USER),root)
+FONT_INSTALL_DIR := $(SYSTEM_FONT_INSTALL_DIR)
+else
+FONT_INSTALL_DIR := $(USER_FONT_INSTALL_DIR)
+endif
+FONT_INSTALL_DIR := $(FONT_INSTALL_DIR)/Apple
 
 FONTS_ZIP := Apple-system-fonts.zip
 
@@ -62,6 +74,17 @@ release: $(DMG_FILES) $(FONTS_ZIP)
 		ln -rsfv "$$DMG_FILE" "$(RELEASE_DIR)"; \
 	done
 	@ln -rsfv "$(FONTS_ZIP)" "$(RELEASE_DIR)"
+
+# install fonts
+.PHONY: install
+install: fonts
+	@mkdir -pv "$(FONT_INSTALL_DIR)"
+	@cp -rfv "$(FONTS_DIR)"/* "$(FONT_INSTALL_DIR)"
+
+# uninstall fonts
+.PHONY: uninstall
+uninstall:
+	-rm -rfv "$(FONT_INSTALL_DIR)"
 
 # cleanup
 .PHONY: clean
