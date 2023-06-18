@@ -6,11 +6,16 @@ The fonts are extracted from the .dmg files, which can be obtained at https://de
 
 The available fonts are:
 
-* SF Pro
-* SF Compact
-* SF Mono
-* SF Arabic
-* New York
+* **SF core fonts**
+    * SF Pro
+    * SF Compact
+    * SF Mono
+    * New York
+* **SF Script Extensions**
+    * SF Arabic
+    * SF Armenian
+    * SF Georgian
+    * SF Hebrew
 
 ![](fonts-hero-large_2x.png)
 
