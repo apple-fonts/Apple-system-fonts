@@ -44,10 +44,6 @@ function check_all_prerequisites {
         "Please install \`p7zip\` from https://p7zip.sourceforge.net/."
     RET=$(expr $RET \| $?)
 
-    check_prerequisite "dmg2img" \
-        "Please install \`dmg2img\` from http://vu1tur.eu.org/tools/."
-    RET=$(expr $RET \| $?)
-
     echo -e "Prerequisite checking completed." >> /dev/stderr
 
     return $RET
