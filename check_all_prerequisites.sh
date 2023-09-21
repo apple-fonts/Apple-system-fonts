@@ -4,7 +4,7 @@ CURDIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 CHECK_EXEC="$CURDIR/check_exec.sh"
 
 # Set all prerequisites to check, along with error messages
-declare -A PREREQUISITES # exec -> nessage
+declare -A PREREQUISITES # exec -> message
 
 PREREQUISITES["7z"]="Command \"7z\" is not available. Please install p7zip-full from https://p7zip.sourceforge.net/."
 
