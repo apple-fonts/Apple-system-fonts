@@ -22,7 +22,7 @@ function extract_fonts_from_dmg {
     local dmgFile="$1"
     local extractDir="$2"
 
-    # pre-check extraction
+    # Pre-check extraction
     if ! [ -f "$dmgFile" ] # check dmg file for extraction
     then
         echo -e "$STATUS_ERROR \"$dmgFile\" is not a valid .dmg file for extraction." >&2
@@ -33,19 +33,20 @@ function extract_fonts_from_dmg {
         exit 1
     fi
 
-    # 1. extract .dmg to temporary directory
+    # 1. Extract .dmg to a temporary directory
     local tempDir="$(mktemp -d)"
     7z x "$dmgFile" -O"$tempDir"
 
-    # 2. extract the .pkg file in the temporary directory
+    # 2. Extract the .pkg file in the temporary directory
     find "$tempDir" -name "*.pkg" -exec 7z x -O"$tempDir" {} ";"
 
-    # 3. extract the "Payload~" file
+    # 3. Extract the "Payload~" file
     find "$tempDir" -name "Payload~" -exec 7z x -O"$tempDir" {} ";"
 
-    # 4. move all .otf and .ttf files to target directory
+    # 4. Move all .otf and .ttf files to target directory
     find "$tempDir" -name "*.[ot]tf" -exec mv -v {} "$extractDir" ";"
 
+    # 5. Clean up
     rm -rf "$tempDir"
 }
 
