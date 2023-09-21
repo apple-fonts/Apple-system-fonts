@@ -5,6 +5,9 @@ TEXT_RED_FG_START="\x1B[31m"
 TEXT_BOLD_START="\x1B[1m"
 TEXT_RESET="\x1B[0m"
 
+# Message status
+STATUS_ERROR="$TEXT_RED_FG_START$TEXT_BOLD_START[ERROR]$TEXT_RESET"
+
 if [ \( -z "$1" \) -o \( -z "$2" \) ]
 then
     echo "Usage: $(which bash) \"$0\" \"<path_to_dmg>\"" "\"<extract_dir>\"" >&2
@@ -22,11 +25,11 @@ function extract_fonts_from_dmg {
     # pre-check extraction
     if ! [ -f "$dmgFile" ] # check dmg file for extraction
     then
-        echo -e "$TEXT_RED_FG_START$TEXT_BOLD_START[ERROR]$TEXT_RESET \"$dmgFile\" is not a valid .dmg file for extraction." >&2
+        echo -e "$STATUS_ERROR \"$dmgFile\" is not a valid .dmg file for extraction." >&2
         exit 1
     elif ! mkdir -p "$extractDir" # create extract directory if not exists
     then
-        echo -e "$TEXT_RED_FG_START$TEXT_BOLD_START[ERROR]$TEXT_RESET Failed to create the extract directory \"$extractDir\"." >&2
+        echo -e "$STATUS_ERROR Failed to create the extract directory \"$extractDir\"." >&2
         exit 1
     fi
 
