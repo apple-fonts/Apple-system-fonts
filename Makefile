@@ -24,16 +24,16 @@ FONT_INSTALL_DIR := $(FONT_INSTALL_DIR)/Apple
 
 FONTS_ZIP := Apple-system-fonts.zip
 
-CHECK_ALL_PREREQUISITES_EXEC := check_all_prerequisites.sh
+CHECK_PREREQUISITES_EXEC := check_prerequisites.sh
 EXTRACT_EXEC := extract_fonts.sh
 
 # build all
 .PHONY: all
-all: fonts zip
+all: fonts
 
 # check all prerequisites
-define CHECK_ALL_PREREQUISITES :=
-	bash $(CHECK_ALL_PREREQUISITES_EXEC)
+define CHECK_PREREQUISITES :=
+	bash $(CHECK_PREREQUISITES_EXEC)
 endef
 
 # extract fonts from .dmg files
@@ -53,7 +53,7 @@ $(DMG_DIR)/%.dmg: $(URL_DIR)/%.url
 
 # extract fonts from each .dmg into a directory
 $(FONTS_DIR)/%: $(DMG_DIR)/%.dmg
-	$(call CHECK_ALL_PREREQUISITES)
+	$(call CHECK_PREREQUISITES)
 	$(eval DMG_FILE = "$<")
 	@mkdir -p "$(dir $@)"
 	bash "$(EXTRACT_EXEC)" "$(DMG_FILE)" "$@"
